@@ -43,9 +43,12 @@ export default function Home() {
     });
   }, []);
 
+  function getDefaultName(): string {
+    return new Date().toLocaleDateString("zh-CN", { month: "long", day: "numeric" }) + " 牌局";
+  }
+
   function validate(): boolean {
     const next: Record<string, string> = {};
-    if (!name.trim()) next.name = "请输入牌局名称";
     const rate = parseFloat(chipRate);
     if (!chipRate || isNaN(rate) || rate <= 0) next.chipRate = "请输入有效汇率";
     const buyin = parseInt(defaultBuyin);
@@ -59,7 +62,7 @@ export default function Home() {
     setCreating(true);
     try {
       const session = await api.createSession(
-        name.trim(),
+        name.trim() || getDefaultName(),
         parseFloat(chipRate),
         parseInt(defaultBuyin)
       );
@@ -90,7 +93,7 @@ export default function Home() {
           <div>
             <label className="text-sm font-medium mb-1 block">牌局名称</label>
             <Input
-              placeholder="例：周五晚局"
+              placeholder={getDefaultName()}
               value={name}
               onChange={(e) => { setName(e.target.value); setErrors((prev) => ({ ...prev, name: "" })); }}
             />
