@@ -10,6 +10,7 @@ function createPrismaClient(): PrismaClient {
     user: process.env.DB_USER || "poker",
     password: process.env.DB_PASSWORD || "",
     database: process.env.DB_NAME || "poker_chips",
+    allowPublicKeyRetrieval: true,
   });
   return new PrismaClient({ adapter });
 }
