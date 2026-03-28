@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/zaaac/Documents/Code/pokerChips)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --turbopack)",
+      "Read(//private/tmp/**)",
+      "Bash(npx create-next-app@latest poker-chips --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --turbopack)",
+      "Bash(rm -rf poker-chips)",
+      "Bash(yes)"
+    ]
+  }
+}
