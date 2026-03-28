@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Session {
+  id           String        @id @db.VarChar(6)
+  name         String        @db.VarChar(100)
+  hostToken    String        @unique @db.VarChar(32)
+  chipRate     Float         @map("chip_rate")
+  defaultBuyin Int           @map("default_buyin")
+  status       SessionStatus @default(active)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  settledAt    DateTime?     @map("settled_at")
+  players      Player[]
+  transactions Transaction[]
+
+  @@map("sessions")
+}
+
+model Player {
+  id           String        @id @default(uuid()) @db.VarChar(36)
+  sessionId    String        @map("session_id") @db.VarChar(6)
+  nickname     String        @db.VarChar(50)
+  playerToken  String        @unique @db.VarChar(32)
+  isActive     Boolean       @default(true) @map("is_active")
+  joinedAt     DateTime      @default(now()) @map("joined_at")
+  session      Session       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@unique([sessionId, nickname])
+  @@map("players")
+}
+
+model Transaction {
+  id            String          @id @default(uuid()) @db.VarChar(36)
+  sessionId     String          @map("session_id") @db.VarChar(6)
+  playerId      String          @map("player_id") @db.VarChar(36)
+  type          TransactionType
+  chips         Int
+  chipBreakdown Json?           @map("chip_breakdown")
+  voided        Boolean         @default(false)
+  voidedAt      DateTime?       @map("voided_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  session       Session         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  player        Player          @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([playerId])
+  @@map("transactions")
+}
+
+enum SessionStatus {
+  active
+  settling
+  completed
+}
+
+enum TransactionType {
+  buyin
+  cashout
+}
