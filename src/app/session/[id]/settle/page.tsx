@@ -240,6 +240,7 @@ export default function SettlePage() {
                         breakdown={playerBreakdown}
                         onChange={(b) => setCashoutBreakdowns((prev) => ({ ...prev, [player.id]: b }))}
                         chipRate={session.chipRate}
+                        showAutoFill={false}
                       />
                       <Button size="sm" className="w-full" onClick={() => handleCashout(player.id)}>
                         确认 Cash-out ({breakdownTotal(playerBreakdown)} chips)

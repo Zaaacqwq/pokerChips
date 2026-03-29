@@ -17,6 +17,7 @@ interface ChipCounterProps {
   onChange: (breakdown: ChipBreakdown) => void;
   chipRate: number;
   disabled?: boolean;
+  showAutoFill?: boolean;
 }
 
 export function ChipCounter({
@@ -24,6 +25,7 @@ export function ChipCounter({
   onChange,
   chipRate,
   disabled = false,
+  showAutoFill = true,
 }: ChipCounterProps) {
   const total = breakdownTotal(breakdown);
   const [amountInput, setAmountInput] = useState("");
@@ -43,7 +45,7 @@ export function ChipCounter({
   return (
     <div className="space-y-2">
       {/* Quick fill by amount */}
-      {!disabled && (
+      {!disabled && showAutoFill && (
         <div className="flex gap-2 items-center">
           <Input
             type="number"
